@@ -19,7 +19,7 @@ import time
 import pyautogui
 import webbrowser
 
-file = "Download.txt"
+file = "Data2021.txt"
 
 with open(file, 'r') as f:
     Lines = f.readlines()
@@ -29,10 +29,10 @@ for l in Lines:
     webbrowser.open(l)
 
     # Deixam descansar un temps per a que es descarregui sense problemes
-    time.sleep(20)
+    time.sleep(7)
 
     # Tancam el navegador (el que fa és "pitjar" les
     # tecles "ctrl" i "w" alhora --> Combinació que si 
     # estas en el navegador tanca la pestanya)
-    pyautogui.hotkey('ctrl', 'w')
-    print("tab closed \n")
+    # pyautogui.hotkey('ctrl', 'w')
+    # print("tab closed \n")
