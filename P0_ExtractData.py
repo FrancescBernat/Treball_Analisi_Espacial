@@ -18,18 +18,30 @@ te permeti descarregar-te les dades.
 import time
 import pyautogui
 import webbrowser
+import urllib.request
 
-file = "Data2021.txt"
+file = "Data2020.txt"
 
 with open(file, 'r') as f:
     Lines = f.readlines()
 
 for l in Lines:
-    # Obri en una pestanya del navegador
-    webbrowser.open(l)
 
-    # Deixam descansar un temps per a que es descarregui sense problemes
-    time.sleep(7)
+    # if i == 0:
+    #     # Obri en una pestanya del navegador
+    #     webbrowser.open(l)
+
+    #     # Deixam descansar un temps per a que es descarregui sense problemes
+    #     time.sleep(60)
+        
+    # else:
+    #     # Obri en una pestanya del navegador
+    #     webbrowser.open(l)
+
+        # Deixam descansar un temps per a que es descarregui sense problemes
+        # time.sleep(3)
+
+    urllib.request.urlretrieve(l, l.split('/')[-1][:-1])
 
     # Tancam el navegador (el que fa és "pitjar" les
     # tecles "ctrl" i "w" alhora --> Combinació que si 

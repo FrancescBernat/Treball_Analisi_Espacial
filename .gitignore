@@ -1,3 +1,6 @@
 DadesMar/
 DadesMar_Proba/
 __pycache__/
+*.pkl
+*.txt
+*.nc

@@ -45,6 +45,7 @@ labels = ['Illes Balears', 'Canal de Menorca',
 
 # Cream llistes i Dataframes buits per usar mes endavant
 Mit = []
+Med = []
 Desv = []
 numNan = []
 Tam = []
@@ -53,11 +54,14 @@ Dades_Sat = pd.DataFrame()
 
 for file in arxius:
 
-    [i.clear() for i in [Mit, Desv, numNan]]
+    [i.clear() for i in [Mit, Desv, numNan, Med]]
 
     T, sst, lat, lon = fun.DadesMODIS(file)
 
     Satelit = file.split('_')[0].split('\\')[1]
+
+    # Elimin les que tenen temperatures inferiors al Antartic (-2)
+    sst[sst<-0] = np.nan
 
     data = xr.DataArray(
                         sst, dims=['x', 'y'], 
@@ -74,14 +78,15 @@ for file in arxius:
 
         numNan.append(np.count_nonzero(np.isnan(red_data.data)))
         Mit.append(np.nanmean(red_data.data))
+        Med.append(np.nanmedian(red_data.data))
         Desv.append(np.nanstd(red_data.data))
         Tam.append(red_data.size)
 
     df = pd.DataFrame(
         {'dia': [T], 'satelit':[Satelit], 
-         'Nan IB':numNan[0],  'Mitj IB':Mit[0],  'Desv IB':Desv[0], 'Tam IB':Tam[0],
-         'Nan CMe':numNan[1], 'Mitj CMe':Mit[1], 'Desv CMe':Desv[1], 'Tam CMe':Tam[1],
-         'Nan CMa':numNan[2], 'Mitj CMa':Mit[2], 'Desv CMa':Desv[2], 'Tam CMa':Tam[2]}
+         'Nan IB':numNan[0],  'Mitj IB':Mit[0],  'Med IB':Med[0],  'Desv IB':Desv[0], 'Tam IB':Tam[0],
+         'Nan CMe':numNan[1], 'Mitj CMe':Mit[1], 'Med CMe':Med[1], 'Desv CMe':Desv[1], 'Tam CMe':Tam[1],
+         'Nan CMa':numNan[2], 'Mitj CMa':Mit[2], 'Med CMa':Med[2], 'Desv CMa':Desv[2], 'Tam CMa':Tam[2]}
         )
 
     Dades_Sat = pd.concat([Dades_Sat, df], ignore_index=True)

@@ -22,7 +22,7 @@ matplotlib.rcParams['mathtext.fontset'] = 'stix'
 matplotlib.rcParams['font.family'] = 'STIXGeneral'
 matplotlib.rcParams.update({'font.size': 14})
 
-arxiu = 'AQUA_MODIS.20200102T125001.L2.SST.nc'
+arxiu = 'AQUA_MODIS.20190104T020501.L2.SST.nc'
 
 # Llegim arxiu nc
 data = nc.Dataset('DadesMar/'+ arxiu, 'r')
