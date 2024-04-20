@@ -32,16 +32,16 @@ r = np.unique(r)
 # Miram els indexos on els Nan superen el 50 %.
 ind_Bad = []
 
-for var in ['CMe', 'CMa', 'IB']:
 
-    # Supos que quan hi ha menys nans 
-    # es quan només es te en compte les illes
-    minNan = df['Nan '+var].min()
 
-    aux = np.squeeze(np.where(
-        (df['Nan '+var]-minNan)/df['Tam '+ var] > 0.4
-        ))
-    ind_Bad += aux.tolist()
+# Supos que quan hi ha menys nans 
+# es quan només es te en compte les illes
+minNan = df['Nan '].min()
+
+aux = np.squeeze(np.where(
+    (df['Nan ']-minNan)/df['Tam '] > 0.4
+    ))
+ind_Bad += aux.tolist()
 
 # Combinam el cas anterior amb  els llocs on son tots nans
 ind = np.unique(ind_Bad + r.tolist())
@@ -49,16 +49,27 @@ ind = np.unique(ind_Bad + r.tolist())
 colors = ['#4C72B0', '#55A868', '#C44E52', '#8172B2', '#CCB974', '#64B5CD']
 
 x = df['dia']
-Mit_IB, Mit_CMe, Mit_CMa = [df['Mitj ' + var] for var in ['IB', 'CMe', 'CMa']]
-Desv_IB, Desv_CMe, Desv_CMa = [df['Desv ' + var] for var in ['IB', 'CMe', 'CMa']]
+# Mit_IB, Mit_CMe, Mit_CMa = [df['Mitj ' + var] for var in ['IB', 'CMe', 'CMa']]
+# Desv_IB, Desv_CMe, Desv_CMa = [df['Desv ' + var] for var in ['IB', 'CMe', 'CMa']]
+Mit = df['Mitj']
+Med = df['Med']
+Desv = df['Desv']
 
-for M, D, tit, col in zip([Mit_IB, Mit_CMe, Mit_CMa],
-                [Desv_IB, Desv_CMe, Desv_CMa], 
-                ['Illes Balears', 'Canal de Menorca',
-                 'Canal de Mallorca'], range(3)):
+# for M, Med, D, tit, col in zip([Mit_IB, Mit_CMe, Mit_CMa],
+#                           [df['Med ' + var] for var in ['IB', 'CMe', 'CMa']],
+#                 [Desv_IB, Desv_CMe, Desv_CMa], 
+#                 ['Illes Balears', 'Canal de Menorca',
+#                  'Canal de Mallorca'], range(3)):
     
     # Graficam les dades sense filtrar
-    fun.fillPlot(x, M, D, tit, colors[col])
+fun.fillPlot(x, Mit, Desv, 'Illes Balears', colors[0])
+
+fun.fillPlot(x, Med, Desv, 'Illes Balears' + " Med", colors[1])
+
+plt.figure(dpi=400)
+plt.plot(Med, label='Median')
+plt.plot(Mit, label='Mean')
+plt.legend()
     
     # # Filtram les dades
     # M[ind] = np.nan
@@ -71,18 +82,18 @@ colors = ["#0718e9", "#38e416", "#eb3f24"]
 
 fig, ax = plt.subplots(figsize=(12, 10), dpi=400)
 
-i = 0
-for Mit, Desv, lab in zip([Mit_IB, Mit_CMa, Mit_CMe],
-                          [Desv_IB, Desv_CMa, Desv_CMe],
-                          ["Illes Balears", "Canal de Mallorca",
-                           "Canal de Menorca"]):
-    ax.errorbar(x, Mit, Desv, fmt='o', linewidth=2, capsize=6,
-                label=lab, color=colors[i])
-    i += 1
+# i = 0
+# for Mit, Desv, lab in zip([Mit_IB, Mit_CMa, Mit_CMe],
+#                           [Desv_IB, Desv_CMa, Desv_CMe],
+#                           ["Illes Balears", "Canal de Mallorca",
+#                            "Canal de Menorca"]):
+#     ax.errorbar(x, Mit, Desv, fmt='o', linewidth=2, capsize=6,
+#                 label=lab, color=colors[i])
+#     i += 1
 
-ax.grid()
-ax.set(xticks=x[::5]) # Reduim les dades a un nombre manejable
-ax.set_ylabel('sst (ºC)', fontsize=30)
-ax.legend()
-fig.autofmt_xdate() # Formata les dates del fons 
-plt.show()
+# ax.grid()
+# ax.set(xticks=x[::10]) # Reduim les dades a un nombre manejable
+# ax.set_ylabel('sst (ºC)', fontsize=30)
+# ax.legend()
+# fig.autofmt_xdate() # Formata les dates del fons 
+# plt.show()
