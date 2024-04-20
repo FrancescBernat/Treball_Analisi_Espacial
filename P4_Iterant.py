@@ -4,11 +4,9 @@
 @File    :   P4_Iterant.py
 @Date    :   2023/12/16 13:03:27
 @Author  :   Francesc Bernat Bieri Tauler 
-@Version :   1.0
+@Version :   2.0
 
     IB  -->  Per referirnos a les Illes Balears
-    CMe -->  Per referirnos al canal de Menorca
-    CMa -->  Per referirnos al canal de Mallorca
 
 Iteram per a totes les dades de satel·lit devallades.    
 '''
@@ -32,36 +30,14 @@ arxius = glob.glob(nom_arxius)
 lat_Glo = [38, 41]
 lon_Glo = [1, 5]
 
-lat_CMe = [39.7, 40]
-lon_CMe = [3.2, 3.9]
-
-lat_CMa = [38.6, 39.5]
-lon_CMa = [1.5, 3]
-
-lats = [lat_Glo, lat_CMe, lat_CMa]
-lons = [lon_Glo, lon_CMe, lon_CMa]
-labels = ['Illes Balears', 'Canal de Menorca', 
-          'Canal de Mallorca']
-
-# Cream llistes i Dataframes buits per usar mes endavant
-# Mit = []
-# Med = []
-# Desv = []
-# numNan = []
-# Tam = []
-
 Dades_Sat = pd.DataFrame()
+Dades_Tot = pd.DataFrame()
 
 for file in arxius:
-
-    # [i.clear() for i in [Mit, Desv, numNan, Med]]
 
     T, sst, lat, lon = fun.DadesMODIS(file)
 
     Satelit = file.split('_')[0].split('\\')[1]
-
-    # Elimin les que tenen temperatures inferiors al Antartic (-2)
-    # sst[sst<-0] = np.nan
 
     data = xr.DataArray(
                         sst, dims=['x', 'y'], 
@@ -69,12 +45,22 @@ for file in arxius:
                                     lat=(["x", "y"], lat))
                         )
 
+    # Elimin les que tenen temperatures inferiors al Antartic (-2)
+    sst[sst<-0] = np.nan
+    data_red = xr.DataArray(
+                            sst, dims=['x', 'y'], 
+                            coords = dict(lon=(["x", "y"], lon), 
+                                        lat=(["x", "y"], lat))
+                            )
+
     date = dt.datetime.strptime(T, "%Y-%m-%d %H:%M:%S")
 
 
     # for la, lo in zip(lats, lons):
 
     red_data = fun.ZonaZoom(data, lon_Glo, lat_Glo)
+    red_data_Posib = fun.ZonaZoom(data_red, lon_Glo, lat_Glo)
+
 
     numNan = (np.count_nonzero(np.isnan(red_data.data)))
     Mit = (np.nanmean(red_data.data))
@@ -82,13 +68,32 @@ for file in arxius:
     Desv = (np.nanstd(red_data.data))
     Tam = (red_data.size)
 
+    # Per a les dades "reduïdes"
+    numNan_red = (np.count_nonzero(np.isnan(red_data_Posib.data)))
+    Mit_red = (np.nanmean(red_data_Posib.data))
+    Med_red = (np.nanmedian(red_data_Posib.data))
+    Desv_red = (np.nanstd(red_data_Posib.data))
+    Tam_red = (red_data_Posib.size)
+
     df = pd.DataFrame(
         {'dia': [T], 'satelit':[Satelit], 
-         'Nan':numNan,  'Mitj':Mit,  'Med':Med,  'Desv':Desv, 'Tam IB':Tam,
+         'Nan':numNan,  'Mitj':Mit,  'Med':Med,  'Desv':Desv, 'Tam':Tam,
+         'Nan red':numNan_red, 'Mitj red':Mit_red, 'Med red':Med_red, 
+         'Desv red':Desv_red, 'Tam red':Tam_red
          }
         )
 
+    df2 = pd.DataFrame({"Dades" : [red_data], "Dades red" : [red_data_Posib],
+                        "T":[T]})
+    
     Dades_Sat = pd.concat([Dades_Sat, df], ignore_index=True)
     Dades_Sat = Dades_Sat.sort_values(by='dia')
+
+    Dades_Tot = pd.concat([Dades_Tot, df], ignore_index=True)
+    Dades_Tot = Dades_Tot.sort_values(by='dia')
+
     # Guardam el dataframe per treballar-ne mes endavant
     Dades_Sat.to_pickle("./dataframe.pkl") 
+    Dades_Tot.to_pickle("./complete_data.pkl")
+
+print("Programa acabat!")

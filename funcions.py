@@ -168,14 +168,14 @@ def fillPlot(x, Mitj, DesvEst, titol, col):
     mp.rcParams['font.family'] = 'STIXGeneral'
     mp.rcParams.update({'font.size': 17})
 
-    fig, ax = plt.subplots(figsize=(10, 8), dpi=600)
+    fig, ax = plt.subplots(figsize=(15, 8), dpi=600)
 
     ax.fill_between(x, Mitj-DesvEst, Mitj+DesvEst, 
                     alpha=.5, linewidth=0, color=col)
     ax.plot(x, Mitj, linewidth=2, color=col)
 
 
-    ax.set(xticks=x[::10], yticks=np.linspace(-4, 18, 9))
+    ax.set(xticks=x[::100], yticks=np.linspace(-4, 20, 9))
     ax.set_ylabel('sst (ºC)', fontsize=30)
 
     ax.set_title(titol, fontsize=25)

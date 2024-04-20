@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # -*-coding:utf-8 -*-
 '''
-@File    :   P5_Grafiques1d.py
+@File    :   P5b_Grafiques1d.py
 @Date    :   2023/12/18 15:53:45
 @Author  :   Francesc Bernat Bieri Tauler 
 @Version :   1.0
 
 Analitzam la mitjana i la desviació estandard del SST
-per a cada una de les nostres regions d'interés.
+per a les dades que 
 '''
 
 import numpy as np
@@ -32,8 +32,6 @@ r = np.unique(r)
 # Miram els indexos on els Nan superen el 50 %.
 ind_Bad = []
 
-
-
 # Supos que quan hi ha menys nans 
 # es quan només es te en compte les illes
 minNan = df['Nan'].min()
@@ -50,9 +48,9 @@ colors = ['#4C72B0', '#55A868', '#C44E52', '#8172B2', '#CCB974', '#64B5CD']
 
 x = df['dia']
 
-Mit = df['Mitj']
-Med = df['Med']
-Desv = df['Desv']
+Mit = df['Mitj red']
+Med = df['Med red']
+Desv = df['Desv red']
 
     
 # Graficam les dades sense filtrar
