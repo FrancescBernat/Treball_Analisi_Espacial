@@ -32,14 +32,12 @@ r = np.unique(r)
 # Miram els indexos on els Nan superen el 50 %.
 ind_Bad = []
 
-
-
 # Supos que quan hi ha menys nans 
 # es quan només es te en compte les illes
 minNan = df['Nan'].min()
 
 aux = np.squeeze(np.where(
-    (df['Nan']-minNan)/df['Tam IB'] > 0.4
+    (df['Nan']-minNan)/df['Tam'] > 0.4
     ))
 ind_Bad += aux.tolist()
 

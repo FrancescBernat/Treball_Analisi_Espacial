@@ -34,10 +34,10 @@ ind_Bad = []
 
 # Supos que quan hi ha menys nans 
 # es quan només es te en compte les illes
-minNan = df['Nan'].min()
+minNan = df['Nan red'].min()
 
 aux = np.squeeze(np.where(
-    (df['Nan']-minNan)/df['Tam IB'] > 0.4
+    (df['Nan red']-minNan)/df['Tam red'] > 0.4
     ))
 ind_Bad += aux.tolist()
 

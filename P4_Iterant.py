@@ -12,6 +12,7 @@ Iteram per a totes les dades de satel·lit devallades.
 '''
 
 import glob 
+import copy
 import numpy as np
 import pandas as pd
 import xarray as xr
@@ -38,9 +39,10 @@ for file in arxius:
     T, sst, lat, lon = fun.DadesMODIS(file)
 
     Satelit = file.split('_')[0].split('\\')[1]
-
+ 
+    # deepcopy perquè no varií al alterar el sst en la següent passa
     data = xr.DataArray(
-                        sst, dims=['x', 'y'], 
+                        copy.deepcopy(sst), dims=['x', 'y'], 
                         coords = dict(lon=(["x", "y"], lon), 
                                     lat=(["x", "y"], lat))
                         )
