@@ -91,8 +91,8 @@ for file in arxius:
     Dades_Sat = pd.concat([Dades_Sat, df], ignore_index=True)
     Dades_Sat = Dades_Sat.sort_values(by='dia')
 
-    Dades_Tot = pd.concat([Dades_Tot, df], ignore_index=True)
-    Dades_Tot = Dades_Tot.sort_values(by='dia')
+    Dades_Tot = pd.concat([Dades_Tot, df2], ignore_index=True)
+    Dades_Tot = Dades_Tot.sort_values(by='T')
 
     # Guardam el dataframe per treballar-ne mes endavant
     Dades_Sat.to_pickle("./dataframe.pkl") 
