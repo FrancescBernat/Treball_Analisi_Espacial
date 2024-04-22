@@ -52,8 +52,18 @@ for i in range(df.shape[0]):
 
             # Considerarem que els punts on tenim dades distintes a nan, son els punts amb dades
             ind = np.isnan(x.data)
-            val = x.data[~ind]
-            lon_red = x['lon'].data[~ind]
-            lat_red = x['lat'].data[~ind]
 
-            valInt = fun_int.ObsInterpolats(lon_red, lat_red, lon, lat, val, 1)
+            # En cas de que no tenguem que tots els indexos siguin nan
+            if not ind.all():
+
+                # Extreim les dades "bones"
+                val = x.data[~ind]
+                lon_red = x['lon'].data[~ind]
+                lat_red = x['lat'].data[~ind]
+
+                # Interpolam
+                valInt = fun_int.ObsInterpolats(lon_red, lat_red, lon, lat, val, 2)
+
+                # Actualitzam les dades dolentes
+                x.data[ind] = valInt[ind]
+                fun.GuardGraf(x, [1, 5], [38, 41], "Balears", df['T'][i])
