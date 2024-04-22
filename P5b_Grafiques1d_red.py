@@ -37,8 +37,7 @@ ind_Bad = []
 minNan = df['Nan red'].min()
 
 aux = np.squeeze(np.where(
-    (df['Nan red']-minNan)/df['Tam red'] > 0.4
-    ))
+    (df['Nan red']-minNan)/df['Tam red'] > 0.6))
 ind_Bad += aux.tolist()
 
 # Combinam el cas anterior amb  els llocs on son tots nans
@@ -52,7 +51,10 @@ Mit = df['Mitj red']
 Med = df['Med red']
 Desv = df['Desv red']
 
-    
+Mit[ind] = np.nan
+Med[ind] = np.nan
+Desv[ind] = np.nan
+
 # Graficam les dades sense filtrar
 fun.fillPlot(x, Mit, Desv, 'Illes Balears', colors[0])
 
@@ -62,7 +64,12 @@ plt.figure(dpi=400)
 plt.plot(Med, label='Median')
 plt.plot(Mit, label='Mean')
 plt.legend()
-    
+
+print(f"La mitjana de les mitjanes és {np.nanmean(Mit)}")
+print(f"I la seva desviació estandard: {np.nanmean(Desv)} \n")
+
+print(f"Usaré {np.nanmean(Mit) - 2*np.nanmean(Desv)} com el valor" \
+      "mínim pel davall no tendré en compte les dades")
 # colors = ["#0718e9", "#38e416", "#eb3f24"]
 
 # fig, ax = plt.subplots(figsize=(12, 10), dpi=400)
