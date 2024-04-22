@@ -16,9 +16,11 @@ import funcions as fun
 import matplotlib as mp
 import datetime as dt
 import matplotlib.pyplot as plt
+import funcions_interp as fun_int
 from importlib import reload
 
 reload(fun)
+reload(fun_int)
 
 mp.rcParams['mathtext.fontset'] = 'stix'
 mp.rcParams['font.family'] = 'STIXGeneral'
@@ -39,11 +41,19 @@ for i in range(df.shape[0]):
 
         x = df['Dades'][i]
 
-        x.data[x.data < sst_min] = np.nan
+        # Miram el tamany de la matriu x, en cas de no tenir un dia completament
+        # buit de dades
+        if x.size > 0: 
+            x.data[x.data < sst_min] = np.nan
 
-        # Extreim les longituds i les latituds, els nostres punts de les malles
-        lat = x.lat.data
-        lon = x.lon.data
+            # Extreim les longituds i les latituds, els nostres punts de les malles
+            lat = x.lat.data
+            lon = x.lon.data
 
-        # Considerarem que els punts on tenim dades distintes a nan, son els punts amb dades
-        ind = np.isnan(x.data)
+            # Considerarem que els punts on tenim dades distintes a nan, son els punts amb dades
+            ind = np.isnan(x.data)
+            val = x.data[~ind]
+            lon_red = x['lon'].data[~ind]
+            lat_red = x['lat'].data[~ind]
+
+            valInt = fun_int.ObsInterpolats(lon_red, lat_red, lon, lat, val, 1)
