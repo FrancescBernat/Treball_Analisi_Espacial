@@ -37,7 +37,10 @@ dataIni = dt.datetime(2019, 12, 31)
 dataFin = dt.datetime(2020, 2, 1)
 
 for i in range(df.shape[0]):
-    if dataIni < dt.datetime.strptime(df['T'][i], "%Y-%m-%d %H:%M:%S") < dataFin:
+
+    day = dt.datetime.strptime(df['T'][i], "%Y-%m-%d %H:%M:%S")
+    
+    if dataIni < day < dataFin:
 
         x = df['Dades'][i]
 
@@ -66,4 +69,4 @@ for i in range(df.shape[0]):
 
                 # Actualitzam les dades dolentes
                 x.data[ind] = valInt[ind]
-                fun.GuardGraf(x, [1, 5], [38, 41], "Balears", df['T'][i])
+                fun.GuardGraf(x, [1, 5], [38, 41], "Balears", day)
